@@ -19,7 +19,6 @@
             overflow-x: hidden;
         }
 
-        /* Spotify-inspired Card UI */
         .spotify-card {
             background: #121212;
             border-radius: 12px;
@@ -56,10 +55,9 @@
             transform: scale(1.05);
         }
 
-        /* Premium Pill Button (Spotify Green) */
-        .btn-spotify-pill {
-            background-color: #1DB954;
-            color: #000;
+        .btn-paypal {
+            background-color: #0070ba;
+            color: #fff;
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 0.15em;
@@ -70,11 +68,31 @@
             gap: 12px;
             font-size: 11px;
             transition: all 0.2s ease;
-            box-shadow: 0 4px 15px rgba(29, 185, 84, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 112, 186, 0.2);
         }
-        .btn-spotify-pill:hover {
+        .btn-paypal:hover {
             transform: scale(1.05);
-            background-color: #1ed760;
+            background-color: #005ea6;
+        }
+
+        .btn-discord {
+            background-color: #5865F2;
+            color: #fff;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            padding: 14px 36px;
+            border-radius: 9999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 11px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(88, 101, 242, 0.2);
+        }
+        .btn-discord:hover {
+            transform: scale(1.05);
+            background-color: #4752c4;
         }
 
         .section-header {
@@ -101,9 +119,16 @@
             margin-top: 8px;
         }
 
-        /* Discord Section Glow */
-        .discord-glow {
-            box-shadow: 0 0 50px rgba(88, 101, 242, 0.1);
+        .paypal-glow {
+            box-shadow: 0 0 50px rgba(0, 112, 186, 0.1);
+        }
+
+        .step-number {
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1;
+            -webkit-text-stroke: 1px rgba(255,255,255,0.1);
+            color: transparent;
         }
     </style>
 </head>
@@ -113,31 +138,27 @@
     <script type="text/babel">
         const { useState, useEffect } = React;
 
+        const PAYPAL_LINK = "https://www.paypal.com"; 
         const DISCORD_LINK = "https://discord.gg/CaN4PcNkR2";
-        const FIVERR_LINK = "https://www.fiverr.com"; 
 
         const PRODUCTS = [
-            { id: 10, name: "Custom Discord Programming", category: "Programming", price: 25.00, image: "spotify-icon", rating: 5.0, description: "Personalized script modification or custom Discord bot integration." },
-            { id: 5, name: "Hypercar Collection Vol. 1", category: "Cars", price: 59.99, image: "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?q=80&w=600&auto=format&fit=crop", rating: 4.9, description: "5 highly detailed hypercars with custom handling." },
-            { id: 6, name: "Off-Road Monster Pack", category: "Cars", price: 44.99, image: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?q=80&w=600&auto=format&fit=crop", rating: 4.8, description: "Rugged terrain vehicles for Blaine County." },
-            { id: 2, name: "Bennys Luxury Garage MLO", category: "Maps", price: 34.99, image: "https://images.unsplash.com/photo-1614332287897-cdc485fa562d?q=80&w=600&auto=format&fit=crop", rating: 5.0, description: "Custom textured garage with 12 slots and office." },
-            { id: 7, name: "Underground Fight Club", category: "Maps", price: 29.99, image: "https://images.unsplash.com/photo-1511886929837-354d827aae26?q=80&w=600&auto=format&fit=crop", rating: 4.7, description: "Secret MLO located beneath Legion Square." },
-            { id: 1, name: "Ultra Housing System v3", category: "Scripts", price: 49.99, image: "https://images.unsplash.com/photo-1558021212-51b6ecfa0db9?q=80&w=600&auto=format&fit=crop", rating: 4.9, description: "Advanced decoration system with real estate agent job." },
-            { id: 4, name: "Dynamic Drug Labs", category: "Scripts", price: 39.99, image: "https://images.unsplash.com/photo-1587202395167-33f760f38101?q=80&w=600&auto=format&fit=crop", rating: 5.0, description: "Crafting systems for Meth, Coke, and Weed." },
-            { id: 3, name: "Tactical LSPD EUP Pack", category: "Clothes", price: 24.99, image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=600&auto=format&fit=crop", rating: 4.6, description: "High-quality vests and badges for RP servers." }
+            { id: 10, name: "Custom discord Programming", category: "Programming", price: 25.00, image: "https://cdn3.emoji.gg/emojis/18148-developer-badge.png", rating: 5.0, description: "bot discord Information about opening the server and bot system ." },
+            { id: 9, name: "Custom fivem Programming", category: "Programming", price: 30.00, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRg6DQ9nS42PFrISGnBkCphoos2eYFU3b1O4A&s", rating: 5.0, description: "devlop sever five." },
+            { id: 5, name: "Citizen cars Pack. 1", category: "Cars", price: 55.00, image: "https://img.gta5-mods.com/q95/images/lore-friendly-tuning-colors-add-on/87ba2d-20210101020836_1.jpg", rating: 4.9, description: "5 Citizen cars by black store." },
+            { id: 6, name: "POLICE Israel Pack", category: "Cars", price: 24.99, image: "https://img.gta5-mods.com/q75/images/israel-kia-sorento-add-on-fivem-ready-replace-els/446827-1.png", rating: 4.8, description: "Rugged terrain vehicles for Blaine County." },
+            { id: 2, name: "Soon", category: "Maps", price: 0.0, image: "https://images.unsplash.com/photo-1614332287897-cdc485fa562d?q=80&w=600&auto=format&fit=crop", rating: 5.0, description: "Soon." },
+            { id: 7, name: "Soon", category: "Maps", price: 0.0, image: "https://images.unsplash.com/photo-1511886929837-354d827aae26?q=80&w=600&auto=format&fit=crop", rating: 4.7, description: "Soon." },
+            { id: 1, name: "black store سكربت بكج الاداره", category: "Scripts", price: 39.99, image: "https://media.discordapp.net/attachments/1490826181883461772/1494479198289662114/banerr.png?ex=69f9d3f6&is=69f88276&hm=dc76513a5133a4db45cd169277bf8bab2110a00af25b73b12c47bc81e7f857b8&=&format=webp&quality=lossless", rating: 4.9, description: "سكربت بكج الاداره." },
+            { id: 4, name: "casino Script", category: "Scripts", price: 29.99, image: "https://img.magnific.com/vector-gratis/ilustracion-realista-juegos-casino_52683-99917.jpg?semt=ais_hybrid&w=740&q=80", rating: 5.0, description: "Script CASINO." },
+            { id: 8, name: "black store صحه Script", category: "Scripts", price: 29.99, image: "https://play-lh.googleusercontent.com/jPOvRV-FWcLdjOjxmbXE-T1lSq3y2EKT4ChDYaa7tr6f3US1B9TmXaKKo9lD9q9NfRQ=w240-h480-rw", rating: 5.0, description: "Script seha." },
+            { id: 3, name: "Citizen Clothes Pack", category: "Clothes", price: 24.99, image: "https://media.discordapp.net/attachments/1498289607136120936/1500941325414174891/image.png?ex=69fa440a&is=69f8f28a&hm=eb739238406a8c0023911d3918cb3b792937dec1817714d928f9242773d95a3f&=&format=webp&quality=lossless", rating: 4.6, description: "Citizen Clothes Pack." }
         ];
 
         function ProductCard({ product, onAdd }) {
             return (
                 <div className="spotify-card flex flex-col group">
                     <div className="img-container">
-                        {product.image === "spotify-icon" ? (
-                            <div className="w-full h-full flex items-center justify-center bg-[#191414]">
-                                <i className="fa-brands fa-spotify text-7xl text-[#1DB954] drop-shadow-[0_0_15px_rgba(29,185,84,0.4)]"></i>
-                            </div>
-                        ) : (
-                            <img src={product.image} alt={product.name} />
-                        )}
+                        <img src={product.image} alt={product.name} />
                         <div className="absolute top-2 right-2 bg-white text-black text-[9px] font-black px-2 py-1 rounded-sm shadow-xl">
                             ${product.price}
                         </div>
@@ -148,18 +169,18 @@
                     <div className="rating-badge mb-4">
                         <div className="flex gap-0.5">
                             {[1, 2, 3, 4, 5].map(star => (
-                                <i key={star} className="fa-solid fa-star text-[#1DB954] text-[7px]"></i>
+                                <i key={star} className="fa-solid fa-star text-[#0070ba] text-[7px]"></i>
                             ))}
                         </div>
                         <span className="text-[9px] font-black text-white">{product.rating}</span>
-                        <span className="text-[8px] text-gray-500 font-bold uppercase tracking-widest ml-1">Excellent</span>
+                        <span className="text-[8px] text-gray-500 font-bold uppercase tracking-widest ml-1">Verified</span>
                     </div>
 
                     <button 
                         onClick={(e) => { e.stopPropagation(); onAdd(product); }}
                         className="mt-auto w-full bg-[#2a2a2a] group-hover:bg-white group-hover:text-black py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all rounded-md"
                     >
-                        Add to Cart
+                        Add to Bag
                     </button>
                 </div>
             );
@@ -168,7 +189,7 @@
         function App() {
             const [cart, setCart] = useState([]);
             const [isCartOpen, setIsCartOpen] = useState(false);
-            const [checkout, setCheckout] = useState(false);
+            const [checkoutStep, setCheckoutStep] = useState(null); 
 
             const addToCart = (product) => {
                 if (!cart.find(item => item.id === product.id)) {
@@ -186,11 +207,11 @@
                     <nav className="fixed top-0 w-full z-50 bg-black/95 border-b border-white/5 h-16 px-6">
                         <div className="max-w-7xl mx-auto h-full flex justify-between items-center">
                             <div className="flex items-center gap-2">
-                                <i className="fa-solid fa-bolt text-white text-xl"></i>
+                                <i className="fa-solid fa-shield-halved text-white text-xl"></i>
                                 <span className="font-black text-sm uppercase tracking-tighter">BLACK STORE</span>
                             </div>
                             <button onClick={() => setIsCartOpen(true)} className="relative hover:scale-110 transition-transform">
-                                <i className="fa-solid fa-cart-shopping text-xl"></i>
+                                <i className="fa-solid fa-bag-shopping text-xl"></i>
                                 {cart.length > 0 && (
                                     <span className="absolute -top-2 -right-2 bg-white text-black text-[9px] font-black px-1.5 py-0.5 rounded-sm">
                                         {cart.length}
@@ -204,28 +225,54 @@
                         <h1 className="text-7xl md:text-9xl font-black tracking-tighter uppercase mb-6 leading-[0.85]">
                             BLACK <span className="text-gray-600 italic">STORE</span>
                         </h1>
-                        <p className="text-gray-500 text-[10px] font-bold uppercase tracking-[0.5em] mb-12">Premium Assets & Custom Code</p>
+                        <p className="text-gray-500 text-[10px] font-bold uppercase tracking-[0.5em] mb-12">Premium Assets • Secure Payments</p>
                         
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                            <div className="flex flex-col items-center gap-2">
-                                <a href={DISCORD_LINK} target="_blank" className="bg-[#5865F2] hover:bg-[#4752c4] text-white px-10 py-4 rounded-full font-black uppercase tracking-widest text-[11px] flex items-center justify-center gap-3 transition-all">
-                                    <i className="fa-brands fa-discord text-xl"></i> Discord
-                                </a>
-                                <span className="text-[8px] font-black text-gray-600 uppercase tracking-widest">Active Community</span>
-                            </div>
-                            <div className="flex flex-col items-center gap-2">
-                                <a href={FIVERR_LINK} target="_blank" className="btn-spotify-pill justify-center">
-                                    <i className="fa-brands fa-spotify text-xl"></i> Fiverr Gigs
-                                </a>
-                                <div className="flex items-center gap-1">
-                                    {[1,2,3,4,5].map(i => <i key={i} className="fa-solid fa-star text-[7px] text-yellow-500"></i>)}
-                                    <span className="text-[8px] font-black text-[#1DB954] uppercase ml-1">Top Rated Seller</span>
-                                </div>
-                            </div>
+                        <div className="flex flex-col md:flex-row justify-center items-center gap-4">
+                            <a href={PAYPAL_LINK} target="_blank" className="btn-paypal w-full md:w-auto justify-center">
+                                <i className="fa-brands fa-paypal text-xl"></i> Pay with PayPal
+                            </a>
+                            <a href={DISCORD_LINK} target="_blank" className="btn-discord w-full md:w-auto justify-center">
+                                <i className="fa-brands fa-discord text-xl"></i> Join Discord
+                            </a>
+                        </div>
+                        <div className="mt-8 flex items-center justify-center gap-2">
+                            <i className="fa-solid fa-lock text-[8px] text-gray-500"></i>
+                            <span className="text-[8px] font-black text-gray-600 uppercase tracking-widest">End-to-End Secure Transaction</span>
                         </div>
                     </header>
 
                     <main className="max-w-7xl mx-auto px-6 pb-40">
+                        {/* Buying Guide */}
+                        <div className="mb-40">
+                            <div className="section-header">
+                                <h2 className="text-3xl font-black uppercase tracking-tighter italic">Official Guide</h2>
+                                <span className="text-[9px] font-bold uppercase text-gray-600 tracking-[0.3em]">Direct PayPal Purchasing</span>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+                                <div className="relative p-8 bg-[#121212] rounded-3xl border border-white/5">
+                                    <span className="step-number absolute top-4 right-8">01</span>
+                                    <h3 className="text-xl font-black uppercase italic mb-4">Bag Assets</h3>
+                                    <p className="text-gray-500 text-xs font-bold uppercase tracking-wider leading-relaxed">
+                                        Select the scripts or MLOs you need. Everything in our store is quality-checked.
+                                    </p>
+                                </div>
+                                <div className="relative p-8 bg-[#121212] rounded-3xl border border-white/5">
+                                    <span className="step-number absolute top-4 right-8">02</span>
+                                    <h3 className="text-xl font-black uppercase italic mb-4">PayPal Pay</h3>
+                                    <p className="text-gray-500 text-xs font-bold uppercase tracking-wider leading-relaxed">
+                                        We use PayPal exclusively for its global security and buyer protection standards.
+                                    </p>
+                                </div>
+                                <div className="relative p-8 bg-[#121212] rounded-3xl border border-white/5">
+                                    <span className="step-number absolute top-4 right-8">03</span>
+                                    <h3 className="text-xl font-black uppercase italic mb-4">Get Files</h3>
+                                    <p className="text-gray-500 text-xs font-bold uppercase tracking-wider leading-relaxed">
+                                        Download links are generated and sent to your email immediately after verification.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
                         {categories.map(cat => (
                             <div key={cat} className="mb-20">
                                 <div className="section-header">
@@ -240,25 +287,23 @@
                             </div>
                         ))}
 
-                        {/* Updated Community Section without Chat Preview */}
-                        <div className="mt-40 p-12 md:p-24 rounded-[3rem] bg-[#121212] border border-white/5 text-center relative overflow-hidden discord-glow">
-                            <div className="absolute top-0 left-0 w-full h-full bg-[#5865F2]/5 opacity-50"></div>
+                        <div className="mt-40 p-12 md:p-24 rounded-[3rem] bg-[#121212] border border-white/5 text-center relative overflow-hidden paypal-glow">
+                            <div className="absolute top-0 left-0 w-full h-full bg-[#0070ba]/5 opacity-50"></div>
                             <div className="relative z-10 flex flex-col items-center">
-                                <div className="w-24 h-24 bg-[#5865F2] rounded-[2rem] flex items-center justify-center mb-10 shadow-2xl">
-                                    <i className="fa-brands fa-discord text-5xl"></i>
+                                <div className="w-24 h-24 bg-[#0070ba] rounded-[2rem] flex items-center justify-center mb-10 shadow-2xl">
+                                    <i className="fa-brands fa-paypal text-5xl"></i>
                                 </div>
                                 <h2 className="text-5xl md:text-7xl font-black uppercase italic tracking-tighter mb-6">
-                                    Elite Community
+                                    Safe & Secure
                                 </h2>
                                 <p className="text-gray-400 text-sm font-bold uppercase tracking-[0.3em] max-w-2xl leading-loose mb-12">
-                                    Join thousands of professional developers and server owners. Get exclusive early access to scripts and 24/7 dedicated support.
+                                    All transactions are processed through PayPal's secure gateway. No card information is ever stored on our servers. Need support? Join our Discord.
                                 </p>
-                                <a href={DISCORD_LINK} className="bg-white text-black px-16 py-5 rounded-full font-black uppercase tracking-[0.4em] text-[11px] transition-all hover:scale-105 hover:bg-[#5865F2] hover:text-white">
-                                    Enter Discord
-                                </a>
-                                <div className="mt-12 flex items-center gap-4">
-                                    <span className="w-3 h-3 bg-[#23a559] rounded-full animate-pulse"></span>
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-gray-500">Live Community Support Active</span>
+                                <div className="flex flex-wrap justify-center gap-8 opacity-40 grayscale">
+                                    <i className="fa-brands fa-cc-visa text-4xl"></i>
+                                    <i className="fa-brands fa-cc-mastercard text-4xl"></i>
+                                    <i className="fa-brands fa-cc-amex text-4xl"></i>
+                                    <i className="fa-brands fa-cc-discover text-4xl"></i>
                                 </div>
                             </div>
                         </div>
@@ -280,11 +325,7 @@
                                         cart.map(item => (
                                             <div key={item.id} className="flex gap-4 items-center bg-[#121212] p-4 rounded-lg">
                                                 <div className="w-12 h-12 bg-black rounded flex items-center justify-center overflow-hidden">
-                                                    {item.image === "spotify-icon" ? (
-                                                        <i className="fa-brands fa-spotify text-[#1DB954]"></i>
-                                                    ) : (
-                                                        <img src={item.image} className="w-full h-full object-cover opacity-50" />
-                                                    )}
+                                                    <img src={item.image} className="w-full h-full object-cover opacity-50" />
                                                 </div>
                                                 <div className="flex-1">
                                                     <div className="text-[10px] font-black uppercase truncate">{item.name}</div>
@@ -301,8 +342,8 @@
                                             <span className="font-black uppercase text-[10px] text-gray-500 tracking-widest">Total</span>
                                             <span className="text-2xl font-black tracking-tighter">${total}</span>
                                         </div>
-                                        <button onClick={() => setCheckout(true)} className="w-full bg-[#FFD700] text-black py-4 rounded-full font-black uppercase text-xs tracking-widest hover:opacity-90">
-                                            Checkout Now
+                                        <button onClick={() => setCheckoutStep('success')} className="w-full bg-[#0070ba] text-white py-4 rounded-full font-black uppercase text-xs tracking-widest hover:opacity-90 flex items-center justify-center gap-3">
+                                            <i className="fa-brands fa-paypal"></i> PayPal Checkout
                                         </button>
                                     </div>
                                 )}
@@ -310,30 +351,37 @@
                         </div>
                     )}
 
-                    {checkout && (
+                    {checkoutStep === 'success' && (
                         <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black p-6">
                             <div className="text-center">
-                                <div className="w-24 h-24 bg-[#1DB954] rounded-full flex items-center justify-center mx-auto mb-8">
-                                    <i className="fa-solid fa-check text-4xl text-black"></i>
+                                <div className="w-24 h-24 bg-[#0070ba] rounded-full flex items-center justify-center mx-auto mb-8">
+                                    <i className="fa-brands fa-paypal text-4xl text-white"></i>
                                 </div>
-                                <h2 className="text-5xl font-black uppercase tracking-tighter mb-4 italic">Success</h2>
-                                <button onClick={() => {setCheckout(false); setCart([]); setIsCartOpen(false);}} className="bg-white text-black px-12 py-4 rounded-full font-black uppercase tracking-widest text-[10px]">Close</button>
+                                <h2 className="text-5xl font-black uppercase tracking-tighter mb-4 italic">Redirecting</h2>
+                                <p className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-8">Logging you into PayPal Secure Gateway...</p>
+                                <button onClick={() => {setCheckoutStep(null); setCart([]); setIsCartOpen(false);}} className="bg-white text-black px-12 py-4 rounded-full font-black uppercase tracking-widest text-[10px]">Cancel</button>
                             </div>
                         </div>
                     )}
 
                     <footer className="bg-black border-t border-white/5 pt-24 pb-12 px-6">
-                        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
-                            <div className="flex items-center gap-3">
-                                <i className="fa-solid fa-bolt text-2xl"></i>
-                                <span className="font-black text-xl tracking-tighter uppercase">BLACK STORE</span>
+                        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12 text-center md:text-left">
+                            <div className="flex flex-col gap-2">
+                                <div className="flex items-center gap-3 justify-center md:justify-start">
+                                    <i className="fa-solid fa-shield-halved text-2xl"></i>
+                                    <span className="font-black text-xl tracking-tighter uppercase">BLACK STORE</span>
+                                </div>
+                                <div className="text-[9px] font-black tracking-[0.4em] uppercase text-gray-700">BLACK STORE &copy; 2026</div>
                             </div>
-                            <div className="flex gap-8">
-                                <a href="#" className="text-gray-600 hover:text-white transition-colors"><i className="fa-brands fa-twitter"></i></a>
-                                <a href="#" className="text-gray-600 hover:text-white transition-colors"><i className="fa-brands fa-instagram"></i></a>
-                                <a href={DISCORD_LINK} className="text-gray-600 hover:text-white transition-colors"><i className="fa-brands fa-discord"></i></a>
+                            
+                            <div className="flex flex-col items-center md:items-end gap-4">
+                                <div className="flex gap-8">
+                                    <a href={DISCORD_LINK} className="text-gray-600 hover:text-[#5865F2] transition-colors text-2xl"><i className="fa-brands fa-discord"></i></a>
+                                    <a href="#" className="text-gray-600 hover:text-white transition-colors text-2xl"><i className="fa-brands fa-twitter"></i></a>
+                                    <a href="#" className="text-gray-600 hover:text-white transition-colors text-2xl"><i className="fa-brands fa-instagram"></i></a>
+                                </div>
+                                <span className="text-[9px] font-black tracking-[0.2em] uppercase text-gray-800">PayPal Verified Merchant</span>
                             </div>
-                            <div className="text-[9px] font-black tracking-[0.4em] uppercase text-gray-700">BLACK STORE &copy; 2024</div>
                         </div>
                     </footer>
                 </div>
