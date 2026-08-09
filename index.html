@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> pom pom</title>
+    <title>pom pom</title>
     <style>
         body {
-           background-color: black;
+            background-color: black;
             color: white;
             font-family: 'Courier New', Courier, monospace;
             text-align: center;
@@ -16,7 +16,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            overflow: hidden; /* لمنع ظهور شريط التمرير */
+            overflow: hidden;
         }
 
         #bg-video {
@@ -25,16 +25,19 @@
             bottom: 0;
             min-width: 100%; 
             min-height: 100%;
-            z-index: -1; /* لوضع الفيديو خلف المحتوى */
+            width: auto;
+            height: auto;
+            z-index: -1;
+            object-fit: cover;
         }
 
         .container {
             width: 80%;
             max-width: 800px;
-            background-color: rgba(0, 0, 0, 0.8); /* خلفية نصف شفافة للمحتوى */
+            background-color: rgba(0, 0, 0, 0.8);
             padding: 20px;
             border-radius: 10px;
-            z-index: 1; /* لوضع المحتوى أمام الفيديو */
+            z-index: 1;
         }
 
         .portrait {
@@ -44,16 +47,8 @@
             margin-bottom: 20px;
         }
 
-        .main-title {
-            font-size: 2em;
-            margin-bottom: 10px;
-        }
-
-        .info {
-            font-size: 1.2em;
-            margin-bottom: 10px;
-        }
-
+        .main-title { font-size: 2em; margin-bottom: 10px; }
+        .info { font-size: 1.2em; margin-bottom: 10px; }
         .ip-address, .location, .isp, .timezone, .coordinates, .server-status {
             font-size: 1em;
             margin-bottom: 5px;
@@ -62,20 +57,39 @@
 </head>
 <body>
 
+    <video autoplay loop muted playsinline id="bg-video">
+        <source src="17c3175f-25c5-47c3-8ca8-a31d793d081f.mp4" type="video/mp4">
+    </video>
+
+    <audio id="bg-audio" loop autoplay>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
 
     <div class="container">
-        <img src="https://i.pinimg.com/736x/5b/9b/fb/5b9bfb4ec29b0b529d2e10fc26076aee.jpg" alt="" class="portrait">
+        <img src="https://i.pinimg.com/736x/cc/ad/94/ccad942e493a518b330f4ea504b9d962.jpg" alt="" class="portrait">
         <h1 class="main-title">fucked by shongxbong </h1>
         <p class="info">SERVER is down</p>
         <p class="info"></p>
         <p class="info">shong x bong is here</p>
-        <p class="ip-address">IP ADDRESS: 148.513.414.145</p>
+        <p class="ip-address">IP ADDRESS: 147.170.871.361 </p>
         <p class="location">LOCATION: Jerusalem, Jerusalem, IL</p>
         <p class="isp">ISP: AS8100 "Bezeq" - THE ISRAEL TELECOMMUNICATION CORP. LTD.</p>
         <p class="timezone">Timezone: Asia/Jerusalem</p>
         <p class="coordinates">Coordinates: 31.7690, 35.2163</p>
         <p class="server-status">SERVER IS down</p>
     </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const audio = document.getElementById('bg-audio');
+            audio.play().catch(error => {
+                // التشغيل مع أول حركة للماوس بدون كبس
+                window.addEventListener('mousemove', () => {
+                    audio.play();
+                }, { once: true });
+            });
+        });
+    </script>
 
 </body>
 </html>
